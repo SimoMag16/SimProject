@@ -1,4 +1,4 @@
-# SimProject
+# Valutazione della Performance di un Rivelatore di Vertice 
 
 La problematica in oggetto è stata affrontata mediante l’implementazione di alcune classi: Cilindro per la geometria, Part per il trasporto delle particelle, Punto per creare oggetti che rappresentassero punti nello spazio e Track per la ricostruzione della traccia. Il codice che fruisce delle suddette classi si è suddiviso in 3 programmi: SimTansTree.C, SmearTans.C e RecoTans.C.
 
