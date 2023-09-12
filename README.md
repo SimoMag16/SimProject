@@ -1,25 +1,5 @@
-# SimProject
+Valutazione Performance di un Rivelatore di Vertice
 
-\documentclass{article}
-\usepackage[english]{babel}
-\usepackage[a4paper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
-\usepackage{amsmath}
-\usepackage{graphicx}
-\usepackage{subcaption}
-\usepackage{mathtools}
-\usepackage{nccmath}
-\usepackage{version}
-\usepackage{float}
-
-\usepackage[colorlinks=true, allcolors=blue]{hyperref}
-\date{11 Settembre 2023}
-\title{Valutazione della Performance di un Rivelatore di Vertice}
-
-\author{Lorenzo Mattei, Simone Maggi}
-
-\begin{document}
-\maketitle
-\section{Abstract}
 La problematica in oggetto è stata affrontata mediante l’implementazione di quattro classi: \textbf{Cilindro.C} per la geometria, \textbf{Part.C} per il trasporto delle particelle, \textbf{Punto.C} per creare oggetti che rappresentassero punti nello spazio e \textbf{Track.C} per la ricostruzione della traccia. Il codice che fruisce delle suddette classi è stato suddiviso in 4 programmi distinti: \textbf{SimTans.C}, \textbf{SmearTans.C}, \textbf{RecoTans.C} e \textbf{AnalysisTans.C}. 
 
 \section{Classi}
