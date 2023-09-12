@@ -1,13 +1,11 @@
 # Valutazione della Performance di un Rivelatore di Vertice 
 
-La problematica in oggetto è stata affrontata mediante l’implementazione di quattro classi: Cilin-
-dro.C per la geometria, Part.C per il trasporto delle particelle, Punto.C per creare oggetti
+La problematica in oggetto è stata affrontata mediante l’implementazione di quattro classi: Cilindro.C per la geometria, Part.C per il trasporto delle particelle, Punto.C per creare oggetti
 che rappresentassero punti nello spazio e Track.C per la ricostruzione della traccia. Il codice che
 fruisce delle suddette classi è stato suddiviso in 4 programmi distinti: SimTans.C, SmearTans.C,
 RecoTans.C e AnalysisTans.C.
 # 2 Classi
-L’implementazione delle seguenti classi comprende un default constructor, uno standard construc-
-tor, un copy constructor, un destuctor, un assignment operator e le funzioni Set, Get e print ove
+L’implementazione delle seguenti classi comprende un default constructor, uno standard constructor, un copy constructor, un destuctor, un assignment operator e le funzioni Set, Get e print ove
 necessario. Sono elencate in seguito le classi utilizzate e si descrive lo scopo di ciascuna di esse
 attraverso l’elenco dei suoi data members e delle sue member functions.
 # 2.1 Cilindro
@@ -27,7 +25,7 @@ Questa classe contiene tutte le informazioni relative a una certa particella qua
 (fX, fY, fZ), la direzione intrapresa (fTh, fPh), il momento fP, la carica fC, l’indice fInd e l’indice
 dell’evento fIndEv. La member function Hit permette di determinare il punto d’impatto della
 particella con la Beam Pipe o i layers di rivelazione a seconda della sua traiettoria. Dando in input
-lo spessore W degli elementi cilindrici e la Radiation Lenght (LR, dipendente dal materiale) `e
+lo spessore W degli elementi cilindrici e la Radiation Lenght (LR, dipendente dal materiale) è
 possibile, tramite la member function scat, simulare il multiple scattering della particella e quindi
 determinarne la nuova direzione in seguito all’attraversamento dello spessore di materiale.
 # 2.4 Track
@@ -53,7 +51,7 @@ realizzando un’apposita member function della classe Part denominata Hit; inol
 su true il booleano doScat è possibile implementare, mediante una seconda member function di
 Part (scat), l’effetto di deviazione dela particella dovuto al passaggio nella materia. Il booleano
 di doIf consente invece di considerare l’accettanza limitata del rivelatore. Infine il programma
-salva in un file il cui nome `e dato in input le coordinate dei punti d’impatto negli strati attivi del
+salva in un file il cui nome è dato in input le coordinate dei punti d’impatto negli strati attivi del
 rivelatore (layer 1 e 2).
 # 3.2 SmearTans.C
 SmearTans.C è stato sviluppato per simulare l’effetto del rivelatore nell’acquisizione dei dati
