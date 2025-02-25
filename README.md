@@ -1,5 +1,7 @@
 # Valutazione della Performance di un Rivelatore di Vertice 
 
+NB launch compileTANS.C on ROOT with the command .x compileTANS.C
+
 La problematica in oggetto è stata affrontata mediante l’implementazione di quattro classi: Cilindro.C per la geometria, Part.C per il trasporto delle particelle, Punto.C per creare oggetti
 che rappresentassero punti nello spazio e Track.C per la ricostruzione della traccia. Il codice che
 fruisce delle suddette classi è stato suddiviso in 4 programmi distinti: SimTans.C, SmearTans.C,
