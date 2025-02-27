@@ -152,7 +152,7 @@ void SimTans(int kNEv, TString fSimName, bool doScat, bool doIf, bool multUnifor
             //Collisione con BP
             double Hit0[3]; //creato nello stack
             Part0->Hit(kRBP, Hit0); //trasporto la particella alla  BP
-            //Part0->setPos(Hit0[0], Hit0[1], Hit0[2]);
+            Part0->setPos(Hit0[0], Hit0[1], Hit0[2]);
             
             double ang0[2];
             if (doScat){
@@ -169,13 +169,13 @@ void SimTans(int kNEv, TString fSimName, bool doScat, bool doIf, bool multUnifor
     	        double z1 = 1e10;
                 double phi1 = 1e10;
 	            new(hits1[i])Punto(phi1, z1); //salvo la hit errata col layer
-	            //Part0->setPos(Hit1[0], Hit1[1], Hit1[2]);
+	            Part0->setPos(Hit1[0], Hit1[1], Hit1[2]);
             }
             else{
 	            double z1 = Hit1[2];
 	            double phi1 = Part0->getPh();
 	            new(hits1[i])Punto(phi1, z1); //salvo la hit col layer
-            	//Part0->setPos(Hit1[0], Hit1[1], Hit1[2]);
+            	Part0->setPos(Hit1[0], Hit1[1], Hit1[2]);
             }
        
             double ang1[2];
@@ -191,13 +191,13 @@ void SimTans(int kNEv, TString fSimName, bool doScat, bool doIf, bool multUnifor
 	            double z2 = 1e10;
 	            double phi2 = 1e10;
 	            new(hits2[i])Punto(phi2, z2);
-	            //Part0->setPos(Hit2[0], Hit2[1], Hit2[2]);
+	            Part0->setPos(Hit2[0], Hit2[1], Hit2[2]);
             }
             else{
 	            double z2 = Hit2[2];
             	double phi2 = Part0->getPh();
 	            new(hits2[i])Punto(phi2, z2);
-	            //Part0->setPos(Hit2[0], Hit2[1], Hit2[2]);
+	            Part0->setPos(Hit2[0], Hit2[1], Hit2[2]);
             }
 
             delete Part0;
