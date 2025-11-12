@@ -1,86 +1,77 @@
-# Valutazione della Performance di un Rivelatore di Vertice 
+Performance Evaluation of a Vertex Detector
 
-NB launch compileTANS.C on ROOT with the command .x compileTANS.C
+NB: Launch compileTANS.C on ROOT with the command .x compileTANS.C
 
-La problematica in oggetto è stata affrontata mediante l’implementazione di quattro classi: Cilindro.C per la geometria, Part.C per il trasporto delle particelle, Punto.C per creare oggetti
-che rappresentassero punti nello spazio e Track.C per la ricostruzione della traccia. Il codice che
-fruisce delle suddette classi è stato suddiviso in 4 programmi distinti: SimTans.C, SmearTans.C,
-RecoTans.C e AnalysisTans.C.
-# 2 Classi
-L’implementazione delle seguenti classi comprende un default constructor, uno standard constructor, un copy constructor, un destuctor, un assignment operator e le funzioni Set, Get e print ove
-necessario. Sono elencate in seguito le classi utilizzate e si descrive lo scopo di ciascuna di esse
-attraverso l’elenco dei suoi data members e delle sue member functions.
-# 2.1 Cilindro
-Questa classe viene usata per descrivere la geometria del rivelatore e permette di creare un cilindro,
-specificandone i data members: altezza (fH), raggio di base (fR) e spessore della superficie laterale
-(fG); queste caratteristiche possono essere stampate all’occorrenza mediante la member function
-print.
-# 2.2 Punto
-La posizione di un punto sulla superficie di un cilindro di raggio fissato `e determinata dalla sua
-coordinata Z (data member fZ) e dall’angolo azimutale φ rispetto all’asse delle X (data member
-fPhi). La classe implementa inoltre una member function (smear) che permette lo smearing dei
-punti, ossia l’aggiunta di una piccola perturbazione della posizione d’impatto che simuli l’errore
-strumentale: in particolare, le fZ e fPhi originali vengono alterate sommando un numero estratto
-da una distribuzione Gaussiana.
-# 2.3 Part
-Questa classe contiene tutte le informazioni relative a una certa particella quali la posizione iniziale
-(fX, fY, fZ), la direzione intrapresa (fTh, fPh), il momento fP, la carica fC, l’indice fInd e l’indice
-dell’evento fIndEv. La member function Hit permette di determinare il punto d’impatto della
-particella con la Beam Pipe o i layers di rivelazione a seconda della sua traiettoria. Dando in input
-lo spessore W degli elementi cilindrici e la Radiation Lenght (LR, dipendente dal materiale) è
-possibile, tramite la member function scat, simulare il multiple scattering della particella e quindi
-determinarne la nuova direzione in seguito all’attraversamento dello spessore di materiale.
-# 2.4 Track
-La classe contiene oggetti che rappresentano la traccia di una particella: i data mebers sono l’indice
-della traccia (fInd), l’indice dell’evento (fIndEv) e i punti di intersezione con due i layers di Silicio
-(fZ1 e fZ2). Il coefficiente angolare e l’intercetta della traiettoria rettilinea nel piando (z, r) sono
-calcolati e restituiti in output dalla member function GetPar.
-# 3 Programmi
-# 3.1 SimTans.C
-SimTans.C si propone di simulare gli aspetti del fenomeno fisico.
-Una volta impostato il numero di eventi desiderato la simulazione estrae la molteplicità (numero di
-particelle prodotte dall’interazione) di ciascun evento da una distribuzione di probabilità che può
-essere uniforme o seguire l’andamento assegnato, in base al valore del booleano multUniform.
-Vengono poi estratte con distribuzioni Gaussiane le coordinate X e Y del vertice d’interazione
-, mentre la coodinata Z è distribuita uniformemente se è vero il booleano zUniform, altrimenti
-anch’essa ha una distribuzione Gaussiana. Si estrae infine la direzione iniziale di ciascuna particella,
-caratterizzata dall’angolo azimutale φ (ditribuito uniformemente) e dall’angolo polare θ, legato alla
-pseudorapidità η, a sua volta estratta da una distribuzione assegnata. L’impulso della particella è
-estratto da una distribuzione uniforme tra 0.6 GeV/c e 0.8 GeV/c, mentre la carica è fissata a 1.
-A questo punto viene simulato il trasporto e calcolato il punto d’impatto delle particelle nei tre
-diversi strati di materiale: beam pipe al berillio, layer 1 e 2 al silicio. Ciò è stato possibile
-realizzando un’apposita member function della classe Part denominata Hit; inoltre impostando
-su true il booleano doScat è possibile implementare, mediante una seconda member function di
-Part (scat), l’effetto di deviazione dela particella dovuto al passaggio nella materia. Il booleano
-di doIf consente invece di considerare l’accettanza limitata del rivelatore. Infine il programma
-salva in un file il cui nome è dato in input le coordinate dei punti d’impatto negli strati attivi del
-rivelatore (layer 1 e 2).
-# 3.2 SmearTans.C
-SmearTans.C è stato sviluppato per simulare l’effetto del rivelatore nell’acquisizione dei dati
-sperimentali, ossia sulle posizioni d’impatto delle particelle sui layers di silicio.
-In questa fase sono stati anche inseriti i punti spuri che simulano il rumore di fondo del rivelatore:
-il numero di punti spuri ha una distribuzione uniforme, con valore massimo fissato a 2 per il primo
-layer e a 2 volte il rapporto dei raggi per il secondo layer, in modo da tenere conto della diversa
-superficie laterale dei due rivelatori.
-I nuovi dati ottenuti vengono poi salvati in un nuovo file, che verr`a poi passato al programma di
-ricostruzione.
-# 3.3 RecoTans.C
-Questo programma usa i dati forniti da SmearTans.C per ricostruire le tracce delle particelle in
-ciascun evento e da queste risalire al vertice di generazione di ciascuna collisione.
-Attraverso un loop sui punti d’impatto nel primo layer si ricerca, per ciascuno di essi, un punto
-d’impatto sul secondo layer che non si discosti in φ per più di 0.01 radianti (che è comunque
-possibile variare), utilizzando un loop innestato sulle hits nel secondo layer; una volta trovata una
-coppia di punti che soddisfa il taglio, viene creata una traccia utilizzando la classe Track.
-A questo punto, si interseca ciascuna traccia con la Beam Line per ottenere una serie di vertici
-“candidati”. Per stiamare la coordinata Z del vertice di interazione si riportano i candidati su un
-istogramma di 128 bin tra -20 cm e 20 cm; si cerca quindi il bin con il massimo numero di conteggi
-(moda) e si fa la media dei candidati che si distibuiscono in questo bin. Qualora fosse presente
-più di un massimo è stato svolto un rebinning con parametro 2. Se la ricerca del massimo fallisce,
-l’evento viene scartato: dall’analisi di questi eventi risulta infatti che i punti candidati come vertice
-sono troppo separati tra loro.
-I risultati ottenuti sono salvati su un file root.
-# 3.4 AnalysisTans.C
-Questo programma permette di confrontare la verità Monte Carlo (risultato si SimTans.C) con
-la ricostruzione sperimentale (risultato di RecoTans.C), in modo da valutare le prestazioni del
-rivelatore di vertice in questione.
+The problem at hand was addressed through the implementation of four classes: Cilindro.C for the geometry, Part.C for particle transport, Punto.C for creating objects representing points in space, and Track.C for track reconstruction.
+The code that uses these classes has been divided into four separate programs: SimTans.C, SmearTans.C, RecoTans.C, and AnalysisTans.C.
 
+2. Classes
+
+Each of the following classes includes a default constructor, a standard constructor, a copy constructor, a destructor, an assignment operator, and Set, Get, and print functions where necessary.
+Below are the implemented classes, along with the description of their purpose, data members, and member functions.
+
+2.1 Cilindro
+
+This class is used to describe the detector geometry and allows the creation of a cylinder by specifying the following data members: height (fH), base radius (fR), and thickness of the lateral surface (fG).
+These characteristics can be printed when needed using the print member function.
+
+2.2 Punto
+
+The position of a point on the surface of a cylinder with fixed radius is determined by its Z coordinate (data member fZ) and the azimuthal angle φ relative to the X-axis (data member fPhi).
+The class also implements a smear member function, which performs smearing of the points — i.e., adding a small perturbation to the impact position to simulate measurement uncertainty. Specifically, the original fZ and fPhi values are altered by adding random numbers drawn from a Gaussian distribution.
+
+2.3 Part
+
+This class contains all information related to a given particle, such as initial position (fX, fY, fZ), direction (fTh, fPh), momentum (fP), charge (fC), index (fInd), and event index (fIndEv).
+The Hit member function determines the impact point of the particle with the beam pipe or the detector layers depending on its trajectory.
+Given as input the thickness W of the cylindrical elements and the Radiation Length (LR) (which depends on the material), it is possible — through the scat function — to simulate multiple scattering of the particle and thus determine its new direction after crossing the material.
+
+2.4 Track
+
+This class contains objects representing the track of a particle. The data members are: track index (fInd), event index (fIndEv), and the intersection points with the two silicon layers (fZ1 and fZ2).
+The slope and intercept of the straight trajectory in the (z, r) plane are computed and returned by the GetPar member function.
+
+3. Programs
+3.1 SimTans.C
+
+SimTans.C aims to simulate the physical phenomena.
+Once the desired number of events is set, the simulation draws the multiplicity (number of particles produced in the interaction) of each event from a probability distribution, which can be uniform or follow a predefined trend, depending on the boolean multUniform.
+
+Then, the X and Y coordinates of the interaction vertex are drawn from Gaussian distributions, while the Z coordinate is uniformly distributed if zUniform is true; otherwise, it also follows a Gaussian distribution.
+Next, the initial direction of each particle is extracted — characterized by the azimuthal angle φ (uniformly distributed) and the polar angle θ, which is related to the pseudorapidity η, itself drawn from a predefined distribution.
+The particle momentum is uniformly distributed between 0.6 and 0.8 GeV/c, and the charge is fixed to 1.
+
+The program then simulates particle transport and calculates the impact points on the three material layers: the beryllium beam pipe, and silicon layers 1 and 2.
+This is done through the Hit member function of the Part class.
+By setting the boolean doScat to true, one can also enable multiple scattering effects through the scat member function of Part.
+The doIf boolean allows for considering the limited acceptance of the detector.
+
+Finally, the program saves to an output file (whose name is provided as input) the coordinates of the impact points on the active detector layers (layers 1 and 2).
+
+3.2 SmearTans.C
+
+SmearTans.C was developed to simulate the detector response during data acquisition — that is, to model the effect on the measured impact positions on the silicon layers.
+
+At this stage, spurious points simulating detector background noise are also introduced.
+The number of such points follows a uniform distribution, with a maximum value of 2 for the first layer and 2 × (radius ratio) for the second layer, to account for the different lateral surfaces of the two detectors.
+
+The new, “smeared” data are then saved in a new file, which will later be used by the reconstruction program.
+
+3.3 RecoTans.C
+
+This program uses the data provided by SmearTans.C to reconstruct the particle tracks in each event and, from these, infer the interaction vertex of each collision.
+
+Using a loop over impact points in the first layer, the program searches — for each point — a corresponding impact point on the second layer that differs by no more than 0.01 radians in φ (this value can be changed).
+Once a matching pair is found, a Track object is created.
+
+Each reconstructed track is then intersected with the beam line to obtain a set of vertex candidates.
+To estimate the Z-coordinate of the interaction vertex, the candidates are filled into a histogram with 128 bins between −20 cm and +20 cm.
+The bin with the highest number of entries (the mode) is identified, and the mean Z value of the candidates in that bin is taken as the reconstructed vertex position.
+If more than one maximum is found, a rebinning with factor 2 is performed.
+If the peak search fails, the event is discarded — as analysis of such cases shows that the vertex candidates are too widely separated.
+
+The obtained results are saved in a ROOT file.
+
+3.4 AnalysisTans.C
+
+This program allows the comparison between Monte Carlo truth (output of SimTans.C) and reconstructed data (output of RecoTans.C), in order to evaluate the performance of the vertex detector.
