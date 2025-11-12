@@ -1,4 +1,4 @@
-Performance Evaluation of a Vertex Detector
+**Performance Evaluation of a Vertex Detector**
 
 NB: Launch compileTANS.C on ROOT with the command .x compileTANS.C
 
@@ -38,7 +38,7 @@ SimTans.C aims to simulate the physical phenomena.
 Once the desired number of events is set, the simulation draws the multiplicity (number of particles produced in the interaction) of each event from a probability distribution, which can be uniform or follow a predefined trend, depending on the boolean multUniform.
 
 Then, the X and Y coordinates of the interaction vertex are drawn from Gaussian distributions, while the Z coordinate is uniformly distributed if zUniform is true; otherwise, it also follows a Gaussian distribution.
-Next, the initial direction of each particle is extracted — characterized by the azimuthal angle φ (uniformly distributed) and the polar angle θ, which is related to the pseudorapidity η, itself drawn from a predefined distribution.
+Next, the initial direction of each particle is extracted, characterized by the azimuthal angle φ (uniformly distributed) and the polar angle θ, which is related to the pseudorapidity η, itself drawn from a predefined distribution.
 The particle momentum is uniformly distributed between 0.6 and 0.8 GeV/c, and the charge is fixed to 1.
 
 The program then simulates particle transport and calculates the impact points on the three material layers: the beryllium beam pipe, and silicon layers 1 and 2.
@@ -61,14 +61,14 @@ The new, “smeared” data are then saved in a new file, which will later be us
 
 This program uses the data provided by SmearTans.C to reconstruct the particle tracks in each event and, from these, infer the interaction vertex of each collision.
 
-Using a loop over impact points in the first layer, the program searches — for each point — a corresponding impact point on the second layer that differs by no more than 0.01 radians in φ (this value can be changed).
+Using a loop over impact points in the first layer, the program searches, for each point, a corresponding impact point on the second layer that differs by no more than 0.01 radians in φ (this value can be changed).
 Once a matching pair is found, a Track object is created.
 
 Each reconstructed track is then intersected with the beam line to obtain a set of vertex candidates.
 To estimate the Z-coordinate of the interaction vertex, the candidates are filled into a histogram with 128 bins between −20 cm and +20 cm.
 The bin with the highest number of entries (the mode) is identified, and the mean Z value of the candidates in that bin is taken as the reconstructed vertex position.
 If more than one maximum is found, a rebinning with factor 2 is performed.
-If the peak search fails, the event is discarded — as analysis of such cases shows that the vertex candidates are too widely separated.
+If the peak search fails, the event is discarded: an analysis of such cases shows that the vertex candidates are too widely separated.
 
 The obtained results are saved in a ROOT file.
 
