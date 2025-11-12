@@ -32,6 +32,7 @@ This class contains objects representing the track of a particle. The data membe
 The slope and intercept of the straight trajectory in the (z, r) plane are computed and returned by the GetPar member function.
 
 **3. Programs**
+
 **3.1 SimTans.C**
 
 SimTans.C aims to simulate the physical phenomena.
